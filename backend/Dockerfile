@@ -1,8 +1,11 @@
+# Use Astral's uv base image with Python 3.11
 FROM ghcr.io/astral-sh/uv:python3.11-alpine
 
-ENV ENV_MODE production
+# Set environment
+ENV ENV_MODE=production
 WORKDIR /app
 
+# Install required system packages
 RUN apk add --no-cache curl git
 
 # Install Python dependencies
@@ -13,32 +16,24 @@ RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --verbose
 # Copy application code
 COPY . .
 
-# Calculate optimal worker count based on 16 vCPUs
-# Using (2*CPU)+1 formula for CPU-bound applications
-ENV WORKERS=33
-ENV THREADS=2
-ENV WORKER_CONNECTIONS=2000
-
+# Resource tuning for Render Free (0.1 CPU, 512 MB RAM)
+ENV WORKERS=1
+ENV THREADS=1
+ENV WORKER_CONNECTIONS=100
 ENV PYTHONPATH=/app
+
 EXPOSE 8000
 
-# Gunicorn configuration
+# Start with Gunicorn (safe for production, tuned down for low resources)
 CMD ["sh", "-c", "uv run gunicorn api:app \
   --workers $WORKERS \
   --worker-class uvicorn.workers.UvicornWorker \
   --bind 0.0.0.0:8000 \
-  --timeout 1800 \
-  --graceful-timeout 600 \
-  --keep-alive 1800 \
-  --max-requests 0 \
-  --max-requests-jitter 0 \
-  --forwarded-allow-ips '*' \
+  --timeout 600 \
+  --graceful-timeout 300 \
+  --keep-alive 75 \
   --worker-connections $WORKER_CONNECTIONS \
-  --worker-tmp-dir /dev/shm \
-  --preload \
   --log-level info \
   --access-logfile - \
   --error-logfile - \
-  --capture-output \
-  --enable-stdio-inheritance \
-  --threads $THREADS"]
+  --capture-output"]
