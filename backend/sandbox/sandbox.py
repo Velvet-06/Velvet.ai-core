@@ -91,7 +91,7 @@ async def create_sandbox(password: str, project_id: str = None) -> AsyncSandbox:
         
     params = CreateSandboxFromImageParams(
         image=Configuration.SANDBOX_IMAGE_NAME,
-        public=True,
+        public=False,
         labels=labels,
         env_vars={
             "CHROME_PERSISTENT_SESSION": "true",
@@ -107,9 +107,9 @@ async def create_sandbox(password: str, project_id: str = None) -> AsyncSandbox:
             "CHROME_CDP": ""
         },
         resources=Resources(
-            cpu=2,
-            memory=4,
-            disk=5,
+            cpu=1,
+            memory=2,
+            disk=3,
         ),
         auto_stop_interval=15,
         auto_archive_interval=24 * 60,

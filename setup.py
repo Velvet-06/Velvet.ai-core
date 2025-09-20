@@ -741,7 +741,7 @@ class SetupWizard:
             elif self.env_vars["llm"].get("OPENROUTER_API_KEY"):
                 self.env_vars["llm"][
                     "MODEL_TO_USE"
-                ] = "openrouter/google/gemini-flash-1.5"
+                ] = "openai/gpt-4o-mini"
 
         print_success(
             f"LLM keys saved. Default model: {self.env_vars['llm'].get('MODEL_TO_USE', 'Not set')}"

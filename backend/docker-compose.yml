@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/suna-ai/suna-backend:latest
+    image: suna-backend:local
     platform: linux/amd64
     build:
       context: .
@@ -41,7 +41,7 @@ services:
       start_period: 40s
 
   worker:
-    image: ghcr.io/suna-ai/suna-backend:latest
+    image: suna-backend:local
     platform: linux/amd64
     build:
       context: .

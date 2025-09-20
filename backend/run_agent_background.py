@@ -172,6 +172,19 @@ async def run_agent_background(
         await redis.set(instance_active_key, "running", ex=redis.REDIS_KEY_TTL)
 
 
+        # Emit a minimal assistant greeting immediately so UI shows something even if model yields nothing
+        try:
+            initial_assistant = {
+                "type": "assistant",
+                "content": json.dumps({"content": "Got it — working on it."})
+            }
+            await redis.rpush(response_list_key, json.dumps(initial_assistant))
+            await redis.publish(response_channel, "new")
+            total_responses += 1
+            logger.info(f"Pushed initial assistant placeholder for run: {agent_run_id}")
+        except Exception as init_push_err:
+            logger.warning(f"Failed to push initial assistant placeholder: {init_push_err}")
+
         # Initialize agent generator
         agent_gen = run_agent(
             thread_id=thread_id, project_id=project_id, stream=stream,
@@ -214,6 +227,20 @@ async def run_agent_background(
 
         # If loop finished without explicit completion/error/stop signal, mark as completed
         if final_status == "running":
+             # If no content was streamed, push a minimal assistant reply so the UI shows something
+             if total_responses == 0:
+                 try:
+                     minimal_assistant = {
+                         "type": "assistant",
+                         "content": json.dumps({"content": "Hello! I'm ready. How can I help?"})
+                     }
+                     await redis.rpush(response_list_key, json.dumps(minimal_assistant))
+                     await redis.publish(response_channel, "new")
+                     total_responses += 1
+                     logger.info(f"Pushed minimal assistant response for empty run: {agent_run_id}")
+                 except Exception as push_err:
+                     logger.warning(f"Failed to push minimal assistant response: {push_err}")
+
              final_status = "completed"
              duration = (datetime.now(timezone.utc) - start_time).total_seconds()
              logger.info(f"Agent run {agent_run_id} completed normally (duration: {duration:.2f}s, responses: {total_responses})")

@@ -111,6 +111,62 @@ export const siteConfig = {
       'Velvet AI helps you automate, create, and organize your work with intelligence and style.',
     inputPlaceholder: 'Ask Velvet to...',
   },
+  bentoSection: {
+    title: 'Why Velvet AI',
+    description: 'Highlights of the platform.',
+    items: [
+      {
+        id: 1,
+        content: <div className="w-full h-full" />,
+        title: 'Open Source Security',
+        description:
+          'Auditable source, strong community, and transparent development.',
+      },
+      {
+        id: 2,
+        content: <div className="w-full h-full" />,
+        title: 'Community Powered',
+        description:
+          'Built together with an active community of developers and users.',
+      },
+    ],
+  },
+  featureSection: {
+    title: 'Powerful features',
+    description: 'What you get on day one.',
+    items: [
+      {
+        id: 1,
+        title: 'Autonomous agents',
+        content: 'Plan, browse, extract, and act with integrated tools.',
+        image: '/banner.png',
+      },
+      {
+        id: 2,
+        title: 'Browser + scraping',
+        content: 'Playwright automation, Firecrawl and Tavily built in.',
+        image: '/banner.png',
+      },
+    ],
+  },
+  growthSection: {
+    title: 'Built to grow with you',
+    description: 'From solo to teams, scale smoothly.',
+    items: [
+      {
+        id: 1,
+        title: 'Pluggable tools',
+        description: 'Enable web, files, CLI, scraping, jobs, payments.',
+        content: <div className="w-full h-60 bg-muted rounded-lg" />,
+      },
+      {
+        id: 2,
+        title: 'Hosted or self-hosted',
+        description: 'Run locally with Docker; deploy to your cloud.',
+        content: <div className="w-full h-60 bg-muted rounded-lg" />,
+      },
+    ],
+  },
   cloudPricingItems: [
     {
       name: 'Free',

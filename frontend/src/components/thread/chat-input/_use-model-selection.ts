@@ -7,9 +7,9 @@ import { useAvailableModels } from '@/hooks/react-query/subscriptions/use-model'
 
 export const STORAGE_KEY_MODEL = 'suna-preferred-model-v2';
 export const STORAGE_KEY_CUSTOM_MODELS = 'customModels';
-export const DEFAULT_PREMIUM_MODEL_ID = 'claude-sonnet-4';
+export const DEFAULT_PREMIUM_MODEL_ID = 'openai/gpt-4o-mini';
 // export const DEFAULT_FREE_MODEL_ID = 'deepseek';
-export const DEFAULT_FREE_MODEL_ID = 'claude-sonnet-4';
+export const DEFAULT_FREE_MODEL_ID = 'openai/gpt-4o-mini';
 
 export type SubscriptionStatus = 'no_subscription' | 'active';
 
@@ -31,10 +31,16 @@ export interface CustomModel {
 // SINGLE SOURCE OF TRUTH for all model data - aligned with backend constants
 export const MODELS = {
   // Free tier models (available to all users)
-  'claude-sonnet-4': { 
+  'openai/gpt-4o-mini': { 
     tier: 'free',
     priority: 100, 
     recommended: true,
+    lowQuality: false
+  },
+  'claude-sonnet-4': { 
+    tier: 'free',
+    priority: 95, 
+    recommended: false,
     lowQuality: false
   },
 
@@ -196,13 +202,13 @@ export const useModelSelection = () => {
       models = [
         { 
           id: DEFAULT_FREE_MODEL_ID, 
-          label: 'DeepSeek', 
+          label: 'GPT-4o Mini', 
           requiresSubscription: false,
           priority: MODELS[DEFAULT_FREE_MODEL_ID]?.priority || 50
         },
         { 
           id: DEFAULT_PREMIUM_MODEL_ID, 
-          label: 'Sonnet 4', 
+          label: 'GPT-4o Mini', 
           requiresSubscription: true, 
           priority: MODELS[DEFAULT_PREMIUM_MODEL_ID]?.priority || 100
         },

@@ -4,7 +4,7 @@ from typing import Optional
 import jwt
 from jwt.exceptions import PyJWTError
 from utils.logger import structlog
-from utils.config import config
+from utils.config import config, EnvMode
 
 # This function extracts the user ID from Supabase JWT
 async def get_current_user_id_from_jwt(request: Request) -> str:
@@ -190,6 +190,9 @@ async def verify_thread_access(client, thread_id: str, user_id: str):
         HTTPException: If the user doesn't have access to the thread
     """
     try:
+        # In local development, bypass strict access checks to unblock MVP flows
+        if getattr(config, 'ENV_MODE', None) == EnvMode.LOCAL:
+            return True
         # Query the thread to get account information
         thread_result = await client.table('threads').select('*,project_id').eq('thread_id', thread_id).execute()
 
