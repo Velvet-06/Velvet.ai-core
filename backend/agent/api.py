@@ -21,7 +21,7 @@ from services.billing import check_billing_status, can_use_model
 from utils.config import config
 from sandbox.sandbox import create_sandbox, delete_sandbox, get_or_start_sandbox
 from services.llm import make_llm_api_call
-from run_agent_background import run_agent_background, _cleanup_redis_response_list, update_agent_run_status
+from run_agent_background_redis import run_agent_background, _cleanup_redis_response_list, update_agent_run_status
 from utils.constants import MODEL_NAME_ALIASES
 from flags.flags import is_enabled
 

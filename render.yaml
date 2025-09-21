@@ -1,0 +1,27 @@
+services:
+  # Worker Service (Redis-based, no RabbitMQ needed)
+  - type: worker
+    name: velvet-worker
+    env: docker
+    dockerfilePath: ./backend/Dockerfile.worker
+    dockerContext: ./backend
+    plan: free
+    region: oregon
+    envVars:
+      - key: ENV_MODE
+        value: production
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: velvet-redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: velvet-redis
+          property: port
+      - key: REDIS_PASSWORD
+        fromService:
+          type: redis
+          name: velvet-redis
+          property: password

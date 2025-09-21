@@ -7,7 +7,7 @@ from .core import TriggerResult, TriggerEvent
 from services.supabase import DBConnection
 from services import redis
 from utils.logger import logger, structlog
-from run_agent_background import run_agent_background
+from run_agent_background_redis import run_agent_background
 
 class TriggerExecutor:
     def __init__(self, db_connection: DBConnection):
